@@ -1,0 +1,30 @@
+version: '3.4'
+services:
+  # back-end api built with golang
+  golang:
+    build: 
+      context: golang
+      target: dev
+    volumes:
+      - ./golang:/root
+    ports:
+      - "8123:8123"
+    env_file: .env.example
+    depends_on:
+      - postgres
+
+  # front-end built with react
+  react:
+    build: 
+      context: react
+      target: dev
+    volumes:
+      - ./react:/root
+    ports:
+      - "3001:3001"
+
+  # postgres is our primary data store
+  postgres:
+    build: postgres
+    volumes:
+      - ./postgres/migrations:/docker-entrypoint-initdb.d/migrations
